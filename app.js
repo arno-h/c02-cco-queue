@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 
 // Load routes into variables
 const index = require('./routes/index');
-const queueRouter = require('./routes/queue');
 const workerRouter = require('./routes/worker');
 const pollingRouter = require('./routes/polling');
 const pubsubRouter = require('./routes/pubsub');
@@ -26,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure routes in Express webserver
 app.use('/', index);
-app.use('/queue', queueRouter);
 app.use('/worker', workerRouter);
 app.use('/polling', pollingRouter);
 app.use('/pubsub', pubsubRouter);

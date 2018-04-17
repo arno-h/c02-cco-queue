@@ -20,7 +20,6 @@ function setup() {
     Request.put({
         url: 'http://localhost:3000/polling/config',
         json: {
-            inputUrl: 'http://localhost:3000/queue/',
             outputUrl: 'http://localhost:3000/pubsub/'
         }
     });
