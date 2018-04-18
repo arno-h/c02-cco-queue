@@ -9,7 +9,8 @@ class Queue {
 
     post(message) {
         return util.promisify3(callback => {
-            this.queueService.createMessage(this.queue_name, JSON.stringify(message), callback);
+            let b64msg = Buffer.from(JSON.stringify(message)).toString('base64');
+            this.queueService.createMessage(this.queue_name, b64msg, callback);
         });
     }
 
@@ -19,7 +20,7 @@ class Queue {
         });
     }
 
-    // returns array of string messages (need to be decoded first!)
+    // returns array of string messages (need to be decoded first: B64 -> JSON.parse)
     get() {
         return util.promisify3(callback => {
             this.queueService.getMessages(this.queue_name, callback);
@@ -33,13 +34,14 @@ class Queue {
 
     }
 
-    // Inhalt ist in result.messageText (muss noch JSON-dekodiert werden)
+    // Inhalt ist in result.message
     async dequeue() {
         let messages = await this.get();
         if (messages.length === 0) {
             return null;
         }
         await this.delete(messages[0]);
+        messages[0].message = JSON.parse(Buffer.from(messages[0].messageText, 'base64'));
         return messages[0];
     }
 
